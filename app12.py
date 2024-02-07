@@ -64,7 +64,7 @@ class MyApp(App):
 
     def open(self, instance):
         # Change the current working directory
-        os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
+        # os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
         # com.whatsapp/.Main
         subprocess.Popen(["adb", "shell", "am", "start", "-n", "com.android.dialer/.BBKTwelveKeyDialer"])
         # Wait for the WhatsApp window to be activated
@@ -72,7 +72,7 @@ class MyApp(App):
 
     def open_recent(self, instance):
         # Change the current working directory
-        os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
+        # os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
         time.sleep(0.5)
         result = subprocess.run(["adb", "shell", "dumpsys", "activity", "recents"], capture_output=True, text=True)
         lines = result.stdout.strip().split("\n")
@@ -89,7 +89,7 @@ class MyApp(App):
 
     def close(self, instance):
         # Change the current working directory
-        os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
+        # os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
         # time.sleep(0.5)
         result = subprocess.run(["adb", "shell", "dumpsys", "activity", "recents"], capture_output=True, text=True)
         lines = result.stdout.strip().split("\n")
@@ -111,7 +111,7 @@ class MyApp(App):
     import time
 
     def call(self, instance):
-        os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
+        # os.chdir('C:\\platform-tools_r34.0.5-windows\\platform-tools')
         # Open the dialer app
         subprocess.Popen(["adb" ,"shell", "am" ,"start" ,'-a' ,'android.intent.action.CALL' ,'-d' ,'tel:+919535431916'])
 
