@@ -35,23 +35,16 @@ jobs:
             git \
             python3-setuptools \
             python3-wheel \
-            python3-dev  # Install python3-dev for cython
+            python3-dev\
+            libffi-dev  # Install python3-dev for cython
 
     - name: Install Cython
       run: |
         pip install --user cython
 
-    - name: Set proxy environment variables
-      if: runner.os == 'Linux'
-      env:
-        http_proxy: http://proxy.example.com:8080
-        https_proxy: http://proxy.example.com:8080
-      run: |
-        echo "Proxy configured for Linux"
-
     - name: Test internet connectivity
       run: |
-        curl -sSf https://www.example.com >/dev/null || exit 1
+        curl -sSf https://www.google.com >/dev/null || exit 1
 
     - name: Install Buildozer
       run: |
