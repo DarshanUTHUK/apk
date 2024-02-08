@@ -27,7 +27,8 @@ jobs:
             build-essential \
             git \
             python3-setuptools \
-            python3-wheel
+            python3-wheel \
+            python3-distutils  # Install distutils module
 
     - name: Install Buildozer
       run: |
