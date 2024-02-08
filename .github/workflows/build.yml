@@ -1,55 +1,26 @@
-name: Build Android App APK
-
-on: [workflow_dispatch]
+name: Build
+on:
+  push:
 
 jobs:
-  build:
+  # Build job. Builds app for Android with Buildozer
+build-android:
+  name: Build for Android
+  runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8]
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - name: Build with Buildozer
+      uses: ArtemSBulgakov/buildozer-action@v1
+      id: buildozer
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |               
-        sudo apt update
-        sudo apt install -qq --yes --no-install-recommends \
-          autoconf \
-          automake \
-          build-essential \
-          ccache \
-          cmake \
-          gettext \
-          git \
-          libffi-dev \
-          libltdl-dev \
-          libssl-dev \
-          libtool \
-          openjdk-13-jdk \
-          patch \
-          pkg-config \
-          python3-pip \
-          python3-setuptools \
-          sudo \
-          unzip \
-          zip \
-          zlib1g-dev
-          
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install --upgrade Cython==0.29.19 wheel pip virtualenv buildozer     
-        
-    - name: Build
-      run: |
-        buildozer android debug
-         
-    - uses: actions/upload-artifact@v2
+        workdir: <specify the directory of the app no don't mention this the app files are in root directory>
+        buildozer_version: stable
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
       with:
-        name: android-apk
-        path: bin/*.apk
+        name: package
+        path: ${{ steps.buildozer.outputs.filename }}
