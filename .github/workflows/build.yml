@@ -9,26 +9,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
-    - name: Set up Python
+
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
-        python-version: 3.x  # Ensure Python 3.x is used
-        architecture: x64
+        python-version: ${{ matrix.python-version }}
 
     - name: Install build dependencies
       run: |
         sudo apt update
         sudo apt install -y \
-            python3-pip \
+            python3-distutils \
             build-essential \
             git \
             python3-setuptools \
-            python3-wheel \
-            python3-distutils  # Install distutils module
+            python3-wheel
 
     - name: Install Buildozer
       run: |
