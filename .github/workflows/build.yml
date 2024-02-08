@@ -48,7 +48,7 @@ jobs:
 
     - name: Install Buildozer
       run: |
-        pip install --user buildozer
+        pip install --user buildozer deploy run
 
     - name: Build APK
       run: |
