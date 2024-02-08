@@ -48,11 +48,11 @@ jobs:
 
     - name: Install Buildozer
       run: |
-        pip install --user buildozer deploy run
+        pip install --user buildozer 
 
     - name: Build APK
       run: |
-        buildozer -v android debug
+        buildozer -v android debug deploy run
 
     - name: Upload APK
       uses: actions/upload-artifact@v2
