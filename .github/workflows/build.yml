@@ -1,61 +1,55 @@
-name: Build APK
+name: Build Android App APK
 
-on:
-  push:
-    branches:
-      - main  # Adjust the branch name as needed
+on: [workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
 
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.8]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Update pip
-      run: |
-        python -m pip install --upgrade pip
-
-    - name: Install build dependencies
-      run: |
+    - name: Install dependencies
+      run: |               
         sudo apt update
-        sudo apt install -y \
-            python3-distutils \
-            build-essential \
-            git \
-            python3-setuptools \
-            python3-wheel \
-            python3-dev\
-            libffi-dev  # Install python3-dev for cython
-
-    - name: Install Cython
+        sudo apt install -qq --yes --no-install-recommends \
+          autoconf \
+          automake \
+          build-essential \
+          ccache \
+          cmake \
+          gettext \
+          git \
+          libffi-dev \
+          libltdl-dev \
+          libssl-dev \
+          libtool \
+          openjdk-13-jdk \
+          patch \
+          pkg-config \
+          python3-pip \
+          python3-setuptools \
+          sudo \
+          unzip \
+          zip \
+          zlib1g-dev
+          
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install --upgrade Cython==0.29.19 wheel pip virtualenv buildozer     
+        
+    - name: Build
       run: |
-        pip install --user cython
-
-    - name: Test internet connectivity
-      run: |
-        curl -sSf https://www.google.com >/dev/null || exit 1
-
-    - name: Install Buildozer
-      run: |
-        pip install --user buildozer 
-
-    - name: Build APK
-      run: |
-        buildozer android debug deploy
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v2
+        buildozer android debug
+         
+    - uses: actions/upload-artifact@v2
       with:
-        name: main-apk
-        path: ./bin/*.apk
+        name: android-apk
+        path: bin/*.apk
